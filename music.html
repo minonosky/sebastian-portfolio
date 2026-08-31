@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="description" content="The music experience of Sebastian Delgadillo.">
+  <title>Music — Sebastian Delgadillo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-start">
+      <a class="home-link" href="index.html">HOME</a>
+      <span aria-hidden="true">|</span>
+      <a class="about-link" href="index.html?about=1" data-about-link>ABOUT</a>
+    </div>
+    <nav aria-label="Main navigation">
+      <a href="projects.html?v=shared-shell-1">PROJECTS</a>
+      <a href="music.html">MUSIC</a>
+      <button class="contact-trigger" type="button" data-contact-open>CONTACT</button>
+    </nav>
+  </header>
+
+  <main class="page-main"></main>
+
+  <footer>
+    <p>© <span data-year></span> SEBASTIAN DELGADILLO</p>
+    <p class="footer-rights">all rights reserved&lt;3</p>
+    <div class="social-links">
+      <a href="https://www.instagram.com/minonosky/" target="_blank" rel="noreferrer">INSTAGRAM ↗</a>
+      <a href="https://github.com/minonosky" target="_blank" rel="noreferrer">GITHUB ↗</a>
+    </div>
+  </footer>
+
+  <dialog class="contact-dialog" data-contact-dialog aria-labelledby="contact-title">
+    <div class="contact-dialog-inner">
+      <button class="contact-close" type="button" data-contact-close aria-label="Close contact panel">CLOSE ×</button>
+      <p class="contact-kicker">03 / CONTACT</p>
+      <h2 class="hand" id="contact-title">contact.</h2>
+      <p class="contact-copy">reach out whenever. i’ll get back to you as soon as i can.</p>
+      <div class="contact-links">
+        <a href="mailto:minonosky@gmail.com">minonosky@gmail.com ↗</a>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="script.js?v=navigation-1"></script>
+</body>
+</html>
