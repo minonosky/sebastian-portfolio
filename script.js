@@ -10,6 +10,105 @@ document.querySelectorAll("img").forEach((image) => {
   image.draggable = false;
 });
 
+const typewriterTargets = Array.from(document.querySelectorAll("[data-typewriter]"));
+const typewriterMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+if (typewriterTargets.length && !typewriterMotion.matches) {
+  typewriterTargets.forEach((target) => {
+    const readableText = target.innerText.replace(/\s+/g, " ").trim();
+    const textNodes = [];
+    const walker = document.createTreeWalker(target, NodeFilter.SHOW_TEXT);
+
+    while (walker.nextNode()) {
+      textNodes.push(walker.currentNode);
+    }
+
+    textNodes.forEach((textNode) => {
+      const fragment = document.createDocumentFragment();
+      const segments = textNode.textContent.match(/\s+|\S+/g) || [];
+
+      segments.forEach((segment) => {
+        if (/^\s+$/.test(segment)) {
+          fragment.append(document.createTextNode(segment));
+          return;
+        }
+
+        const word = document.createElement("span");
+        word.className = "typewriter-word";
+        word.setAttribute("aria-hidden", "true");
+
+        Array.from(segment).forEach((character) => {
+          const letter = document.createElement("span");
+          letter.className = "typewriter-letter";
+          letter.textContent = character;
+          word.append(letter);
+        });
+
+        fragment.append(word);
+      });
+
+      textNode.replaceWith(fragment);
+    });
+
+    target.setAttribute("aria-label", readableText);
+    target.classList.add("typewriter-ready");
+  });
+
+  const wait = (duration) => new Promise((resolve) => window.setTimeout(resolve, duration));
+
+  const playTypewriter = async () => {
+    await wait(280);
+
+    for (const target of typewriterTargets) {
+      target.classList.add("is-typing");
+      let previousLetter = null;
+      const letters = Array.from(target.querySelectorAll(".typewriter-letter"));
+
+      for (let letterIndex = 0; letterIndex < letters.length; letterIndex += 1) {
+        const letter = letters[letterIndex];
+        previousLetter?.classList.remove("is-current");
+
+        if (letter.textContent === "&") {
+          letter.textContent = "^";
+          letter.classList.add("is-visible", "is-current");
+          await wait(340);
+          letter.classList.remove("is-visible", "is-current");
+          previousLetter?.classList.add("is-current");
+          await wait(90);
+
+          const deletedLetter = previousLetter;
+          const letterBeforeCorrection = letters[letterIndex - 2];
+          deletedLetter?.classList.remove("is-visible", "is-current");
+          letterBeforeCorrection?.classList.add("is-current");
+          await wait(260);
+
+          letterBeforeCorrection?.classList.remove("is-current");
+          deletedLetter?.classList.add("is-visible", "is-current");
+          await wait(95);
+          deletedLetter?.classList.remove("is-current");
+
+          letter.textContent = "&";
+        }
+
+        letter.classList.add("is-visible");
+        letter.classList.add("is-current");
+        previousLetter = letter;
+        await wait(48 + Math.random() * 38);
+
+        if (target === typewriterTargets[0] && letter.textContent === ",") {
+          await wait(520);
+        }
+      }
+
+      previousLetter?.classList.remove("is-current");
+      target.classList.remove("is-typing");
+      await wait(target === typewriterTargets[0] ? 760 : 190);
+    }
+  };
+
+  playTypewriter();
+}
+
 const portraitAbout = document.querySelector("#portrait-about");
 
 if (portraitAbout) {
@@ -65,44 +164,6 @@ document.addEventListener("keydown", (event) => {
 
 ["gesturestart", "gesturechange", "gestureend"].forEach((eventName) => {
   document.addEventListener(eventName, (event) => event.preventDefault());
-});
-
-const contactDialog = document.querySelector("[data-contact-dialog]");
-const contactOpeners = document.querySelectorAll("[data-contact-open]");
-const contactCloser = contactDialog?.querySelector("[data-contact-close]");
-let contactReturnFocus = null;
-
-const closeContactDialog = () => {
-  if (!contactDialog) return;
-
-  if (typeof contactDialog.close === "function") {
-    contactDialog.close();
-  } else {
-    contactDialog.removeAttribute("open");
-  }
-};
-
-contactOpeners.forEach((opener) => {
-  opener.addEventListener("click", () => {
-    if (!contactDialog) return;
-    contactReturnFocus = opener;
-
-    if (typeof contactDialog.showModal === "function") {
-      contactDialog.showModal();
-    } else {
-      contactDialog.setAttribute("open", "");
-    }
-  });
-});
-
-contactCloser?.addEventListener("click", closeContactDialog);
-
-contactDialog?.addEventListener("click", (event) => {
-  if (event.target === contactDialog) closeContactDialog();
-});
-
-contactDialog?.addEventListener("close", () => {
-  contactReturnFocus?.focus();
 });
 
 document.querySelectorAll("[data-film-roll]").forEach((roll) => {

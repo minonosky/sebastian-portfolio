@@ -17,24 +17,42 @@
     <nav aria-label="Main navigation">
       <a href="projects.html?v=shared-shell-1">PROJECTS</a>
       <a href="music.html">MUSIC</a>
-      <button class="contact-trigger" type="button" data-contact-open>CONTACT</button>
     </nav>
   </header>
 
   <main class="home-main">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy hand">
-        <h1 id="hero-title">hi, i’m seb.</h1>
-        <p>computer science<br>student &amp; musician.</p>
-        <a class="look-link" href="#about">take a look <span>↓</span></a>
+        <h1 id="hero-title" data-typewriter>hi, i’m seb.</h1>
+        <p data-typewriter>computer science<br>student &amp; musician.</p>
+        <nav class="hero-socials" aria-label="Social profiles">
+          <a href="https://www.instagram.com/minonosky/" target="_blank" rel="noopener noreferrer">
+            <img src="images/socials/instagram.svg" alt="" width="26" height="26">
+            <span>INSTAGRAM</span>
+          </a>
+          <a href="https://github.com/minonosky" target="_blank" rel="noopener noreferrer">
+            <img class="social-logo-invert" src="images/tech-stack/github.svg" alt="" width="26" height="26">
+            <span>GITHUB</span>
+          </a>
+          <a href="https://x.com/minonosky" target="_blank" rel="noopener noreferrer">
+            <img src="images/socials/x.svg" alt="" width="26" height="26">
+            <span>X</span>
+          </a>
+          <a href="mailto:minonosky@gmail.com">
+            <img src="images/socials/gmail.svg" alt="" width="26" height="26">
+            <span>minonosky@gmail.com</span>
+          </a>
+        </nav>
       </div>
+
+      <a class="scroll-cue" href="#about" aria-label="View projects and music">↓</a>
 
       <div class="hero-contact">
         <div class="hero-person" id="portrait-about" tabindex="0" aria-label="Hover or focus to show a short note about Sebastian">
           <img class="person-photo" src="images/body-cutout.png" alt="" draggable="false">
         </div>
         <div class="contact-reveal">
-          <p class="about-location"><span aria-hidden="true"></span>UNITED STATES<span aria-hidden="true">🇺🇸</span></p>
+          <p class="about-location">UNITED STATES<img src="images/us-flag.svg" alt="" aria-hidden="true"></p>
           <p>21 y/o studying computer science at Fullerton College with a growing focus on machine learning and AI.</p>
           <div class="tech-stack" role="group" aria-label="Tech stack and tools">
             <span class="tech-stack-label">STACK / TOOLS</span>
@@ -61,7 +79,6 @@
           <p class="panel-number">01 / PROJECTS</p>
           <h2 class="hand">projects.</h2>
           <p>see projects i've worked on.</p>
-          <span>SEE PROJECTS ↗</span>
         </div>
         <div class="panel-image film-roll" data-film-roll data-film-speed="55" data-film-direction="right" role="group" aria-label="Programming project image reel">
           <div class="film-track">
@@ -79,7 +96,6 @@
           <p class="panel-number">02 / MUSIC</p>
           <h2 class="hand">music.</h2>
           <p>discover my background in music.</p>
-          <span>SEE MUSIC ↗</span>
         </div>
         <div class="panel-image film-roll" data-film-roll data-film-speed="48" role="group" aria-label="Music image reel">
           <div class="film-track">
@@ -102,25 +118,8 @@
   </main>
 
   <footer>
-    <p>© <span data-year></span> SEBASTIAN DELGADILLO</p>
-    <p class="footer-rights">all rights reserved&lt;3</p>
-    <div class="social-links">
-      <a href="https://www.instagram.com/minonosky/" target="_blank" rel="noreferrer">INSTAGRAM ↗</a>
-      <a href="https://github.com/minonosky" target="_blank" rel="noreferrer">GITHUB ↗</a>
-    </div>
+    <p>© <span data-year></span> Sebastian Delgadillo; all rights reserved&lt;3</p>
   </footer>
-
-  <dialog class="contact-dialog" data-contact-dialog aria-labelledby="contact-title">
-    <div class="contact-dialog-inner">
-      <button class="contact-close" type="button" data-contact-close aria-label="Close contact panel">CLOSE ×</button>
-      <p class="contact-kicker">03 / CONTACT</p>
-      <h2 class="hand" id="contact-title">contact.</h2>
-      <p class="contact-copy">reach out whenever. i’ll get back to you as soon as i can.</p>
-      <div class="contact-links">
-        <a href="mailto:minonosky@gmail.com">minonosky@gmail.com ↗</a>
-      </div>
-    </div>
-  </dialog>
 
   <script src="script.js?v=navigation-1"></script>
 </body>
