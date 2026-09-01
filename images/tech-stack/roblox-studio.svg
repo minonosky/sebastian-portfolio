@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-label="Roblox Studio">
+  <defs>
+    <linearGradient id="studio-gradient" x1="3" y1="3" x2="21" y2="21" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00a8ff"/>
+      <stop offset="1" stop-color="#0066d6"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#studio-gradient)" fill-rule="evenodd" d="m7 1 16 6-6 16-16-6L7 1Zm2.7 7.2 6.1 2.3-2.3 6.1-6.1-2.3 2.3-6.1Z"/>
+</svg>

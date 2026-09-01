@@ -100,7 +100,9 @@ if (typewriterTargets.length && !typewriterMotion.matches) {
         }
       }
 
-      previousLetter?.classList.remove("is-current");
+      if (target !== typewriterTargets[typewriterTargets.length - 1]) {
+        previousLetter?.classList.remove("is-current");
+      }
       target.classList.remove("is-typing");
       await wait(target === typewriterTargets[0] ? 760 : 190);
     }
@@ -133,7 +135,7 @@ if (portraitAbout) {
     });
   });
 
-  window.addEventListener("hashchange", activatePortraitAbout);
+  window.addEventListener("hashchange", () => activatePortraitAbout());
   activatePortraitAbout();
 }
 
