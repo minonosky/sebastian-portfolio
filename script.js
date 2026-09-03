@@ -10,6 +10,95 @@ document.querySelectorAll("img").forEach((image) => {
   image.draggable = false;
 });
 
+document.querySelectorAll("[data-card-href]").forEach((card) => {
+  const openCardDestination = () => {
+    const destination = card.dataset.cardHref;
+    if (!destination) return;
+
+    if (/^https?:\/\//i.test(destination)) {
+      window.open(destination, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    window.location.href = destination;
+  };
+
+  card.addEventListener("click", (event) => {
+    if (event.target instanceof Element && event.target.closest("a")) return;
+    openCardDestination();
+  });
+
+  card.addEventListener("keydown", (event) => {
+    if (event.target instanceof Element && event.target.closest("a")) return;
+    if (!['Enter', ' '].includes(event.key)) return;
+    event.preventDefault();
+    openCardDestination();
+  });
+});
+
+document.querySelectorAll("[data-case-carousel]").forEach((carousel) => {
+  const slides = Array.from(carousel.querySelectorAll(".case-media-item"));
+  const previousButton = carousel.querySelector("[data-carousel-prev]");
+  const nextButton = carousel.querySelector("[data-carousel-next]");
+  const count = carousel.querySelector("[data-carousel-count]");
+  let activeSlide = 0;
+
+  if (!slides.length) return;
+
+  const showSlide = (nextSlide) => {
+    activeSlide = (nextSlide + slides.length) % slides.length;
+
+    slides.forEach((slide, index) => {
+      if (index !== activeSlide) {
+        slide.querySelectorAll("video").forEach((video) => video.pause());
+      }
+      slide.hidden = index !== activeSlide;
+    });
+
+    if (count) {
+      const current = String(activeSlide + 1).padStart(2, "0");
+      const total = String(slides.length).padStart(2, "0");
+      count.textContent = `${current} / ${total}`;
+    }
+  };
+
+  previousButton?.addEventListener("click", () => showSlide(activeSlide - 1));
+  nextButton?.addEventListener("click", () => showSlide(activeSlide + 1));
+
+  carousel.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") showSlide(activeSlide - 1);
+    if (event.key === "ArrowRight") showSlide(activeSlide + 1);
+  });
+
+  showSlide(0);
+});
+
+const robloxStats = document.querySelector("[data-roblox-stats]");
+
+if (robloxStats) {
+  const compactNumber = new Intl.NumberFormat("en-US", {
+    notation: "compact",
+    maximumFractionDigits: 1
+  });
+
+  fetch("/api/roblox-stats")
+    .then((response) => {
+      if (!response.ok) throw new Error("Roblox stats are unavailable");
+      return response.json();
+    })
+    .then((stats) => {
+      ["visits", "favorites", "playing", "members"].forEach((name) => {
+        const target = robloxStats.querySelector(`[data-roblox-stat="${name}"]`);
+        if (target && Number.isFinite(stats[name])) {
+          target.textContent = compactNumber.format(stats[name]);
+        }
+      });
+    })
+    .catch(() => {
+      // keep the saved values visible when previewing locally or if Roblox is unavailable
+    });
+}
+
 const typewriterTargets = Array.from(document.querySelectorAll("[data-typewriter]"));
 const typewriterMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -168,38 +257,6 @@ document.addEventListener("keydown", (event) => {
   document.addEventListener(eventName, (event) => event.preventDefault());
 });
 
-document.querySelectorAll("[data-film-roll]").forEach((roll) => {
-  const track = roll.querySelector(".film-track");
-  const sequence = track?.querySelector(".film-sequence");
-  if (!track || !sequence) return;
-
-  const duplicate = sequence.cloneNode(true);
-  duplicate.setAttribute("aria-hidden", "true");
-  duplicate.querySelectorAll("img").forEach((image) => {
-    image.alt = "";
-  });
-  track.append(duplicate);
-
-  const updateFilmSpeed = () => {
-    const sequenceWidth = sequence.getBoundingClientRect().width;
-    const pixelsPerSecond = Number.parseFloat(roll.dataset.filmSpeed) || 50;
-    if (sequenceWidth <= 0) return;
-
-    const duration = Math.max(sequenceWidth / pixelsPerSecond, 10);
-    track.style.setProperty("--film-duration", `${duration.toFixed(2)}s`);
-    roll.classList.add("is-ready");
-  };
-
-  window.requestAnimationFrame(updateFilmSpeed);
-
-  if ("ResizeObserver" in window) {
-    const filmObserver = new ResizeObserver(updateFilmSpeed);
-    filmObserver.observe(roll);
-  } else {
-    window.addEventListener("resize", updateFilmSpeed);
-  }
-});
-
 const hero = document.querySelector(".hero");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -223,4 +280,49 @@ if (hero && !reducedMotion.matches) {
   updateHeroFade();
   window.addEventListener("scroll", requestHeroUpdate, { passive: true });
   window.addEventListener("resize", requestHeroUpdate);
+}
+
+const projectRevealTargets = Array.from(document.querySelectorAll(".featured-heading, .featured-project"));
+
+if (projectRevealTargets.length && !reducedMotion.matches && "IntersectionObserver" in window) {
+  document.documentElement.classList.add("reveal-ready");
+
+  const projectRevealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-visible");
+      projectRevealObserver.unobserve(entry.target);
+    });
+  }, {
+    threshold: 0.12,
+    rootMargin: "0px 0px -8% 0px"
+  });
+
+  projectRevealTargets.forEach((target) => projectRevealObserver.observe(target));
+}
+
+const featuredProjects = document.querySelector(".featured-projects");
+
+if (featuredProjects && !reducedMotion.matches) {
+  let projectFadeFramePending = false;
+
+  const updateProjectFade = () => {
+    const sectionTop = featuredProjects.getBoundingClientRect().top;
+    const fadeStart = window.innerHeight * 0.85;
+    const fadeEnd = window.innerHeight * 0.35;
+    const progress = (fadeStart - sectionTop) / (fadeStart - fadeEnd);
+    const opacity = Math.min(Math.max(progress, 0), 1);
+    featuredProjects.style.setProperty("--projects-fade", String(opacity));
+    projectFadeFramePending = false;
+  };
+
+  const requestProjectFadeUpdate = () => {
+    if (projectFadeFramePending) return;
+    projectFadeFramePending = true;
+    window.requestAnimationFrame(updateProjectFade);
+  };
+
+  updateProjectFade();
+  window.addEventListener("scroll", requestProjectFadeUpdate, { passive: true });
+  window.addEventListener("resize", requestProjectFadeUpdate);
 }

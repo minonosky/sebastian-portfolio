@@ -15,7 +15,6 @@
       <a class="about-link" href="index.html?about=1" data-about-link>ABOUT</a>
     </div>
     <nav aria-label="Main navigation">
-      <a href="projects.html?v=shared-shell-1">PROJECTS</a>
       <a href="music.html">MUSIC</a>
     </nav>
   </header>
@@ -26,26 +25,21 @@
         <h1 id="hero-title" data-typewriter>hi, i’m seb.</h1>
         <p data-typewriter>computer science<br>student &amp; musician.</p>
         <nav class="hero-socials" aria-label="Social profiles">
-          <a href="https://www.instagram.com/minonosky/" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.instagram.com/minonosky/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
             <img src="images/socials/instagram.svg" alt="" width="26" height="26">
-            <span>INSTAGRAM</span>
           </a>
-          <a href="https://github.com/minonosky" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/minonosky" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
             <img class="social-logo-invert" src="images/tech-stack/github.svg" alt="" width="26" height="26">
-            <span>GITHUB</span>
           </a>
-          <a href="https://x.com/minonosky" target="_blank" rel="noopener noreferrer">
+          <a href="https://x.com/minonosky" target="_blank" rel="noopener noreferrer" aria-label="X">
             <img src="images/socials/x.svg" alt="" width="26" height="26">
-            <span>X</span>
           </a>
-          <a href="mailto:minonosky@gmail.com">
+          <a class="email-social" href="mailto:minonosky@gmail.com">
             <img src="images/socials/gmail.svg" alt="" width="26" height="26">
             <span>minonosky@gmail.com</span>
           </a>
         </nav>
       </div>
-
-      <a class="scroll-cue" href="#about" aria-label="View projects and music">↓</a>
 
       <div class="hero-contact">
         <div class="hero-person" id="portrait-about" tabindex="0" aria-label="Hover or focus to show a short note about Sebastian">
@@ -86,47 +80,52 @@
       </div>
     </section>
 
-    <section class="identity-panels" id="about" aria-label="Programming and music">
-      <a class="identity-panel code-panel" href="projects.html?v=shared-shell-1">
-        <div class="panel-copy">
-          <p class="panel-number">01 / PROJECTS</p>
-          <h2 class="hand">projects.</h2>
-          <p>see projects i've worked on.</p>
-        </div>
-        <div class="panel-image film-roll" data-film-roll data-film-speed="55" data-film-direction="right" role="group" aria-label="Programming project image reel">
-          <div class="film-track">
-            <div class="film-sequence">
-              <img class="film-frame" src="images/panel-rolls/projects/project1.png" width="512" height="512" alt="" draggable="false">
-              <img class="film-frame" src="images/panel-rolls/projects/project2.jpg" width="1920" height="1080" alt="" draggable="false">
-              <img class="film-frame" src="images/panel-rolls/projects/project3.jpg" width="972" height="678" alt="" draggable="false">
-            </div>
-          </div>
-        </div>
-      </a>
+    <section class="featured-projects" id="featured-projects" aria-labelledby="featured-projects-title">
+      <header class="featured-heading">
+        <h2 class="hand" id="featured-projects-title">featured projects.</h2>
+      </header>
 
-      <a class="identity-panel music-panel" href="music.html">
-        <div class="panel-copy">
-          <p class="panel-number">02 / MUSIC</p>
-          <h2 class="hand">music.</h2>
-          <p>discover my background in music.</p>
-        </div>
-        <div class="panel-image film-roll" data-film-roll data-film-speed="48" role="group" aria-label="Music image reel">
-          <div class="film-track">
-            <div class="film-sequence">
-              <img class="film-frame" src="images/panel-rolls/music/image1.jpg" width="1280" height="853" alt="" draggable="false">
-              <img class="film-frame" src="images/panel-rolls/music/image2.png" width="1179" height="651" alt="" draggable="false">
-              <img class="film-frame" src="images/panel-rolls/music/image3.png" width="1179" height="651" alt="" draggable="false">
-              <img class="film-frame" src="images/panel-rolls/music/image4.png" width="1170" height="656" alt="" draggable="false">
-              <img class="film-frame" src="images/panel-rolls/music/image5.png" width="455" height="499" alt="" draggable="false">
-              <img class="film-frame" src="images/panel-rolls/music/image6.png" width="457" height="506" alt="" draggable="false">
-              <img class="film-frame" src="images/panel-rolls/music/image7.png" width="1011" height="651" alt="" draggable="false">
-              <img class="film-frame" src="images/panel-rolls/music/image8.png" width="1179" height="652" alt="" draggable="false">
-              <img class="film-frame" src="images/panel-rolls/music/image9.png" width="1179" height="1568" alt="" draggable="false">
-              <img class="film-frame" src="images/panel-rolls/music/image10.jpg" width="800" height="534" alt="" draggable="false">
+      <div class="featured-list">
+        <article class="featured-project" data-card-href="marching-band.html" tabindex="0" role="link" aria-label="View the Marching Band: Rehearsal Site case study">
+          <figure class="featured-thumb">
+            <img src="images/projects/roblox/screenshot5.png" alt="Preview of the Roblox marching band project" width="512" height="512">
+          </figure>
+          <div class="featured-name">
+            <h3 class="hand">Marching Band: Rehearsal Site</h3>
+            <p>a marching band game/community built in Roblox.</p>
+          </div>
+          <div class="featured-card-footer">
+            <p class="featured-tools">LUA / ROBLOX STUDIO</p>
+            <div class="featured-card-icons" aria-label="Lua and Roblox Studio">
+              <img src="images/tech-stack/lua.svg" alt="Lua" width="22" height="22">
+              <a class="featured-project-link" href="https://www.roblox.com/games/91005568012348/Marching-Band-Rehearsal-Site" target="_blank" rel="noopener noreferrer" aria-label="Play Marching Band: Rehearsal Site on Roblox">
+                <img src="images/tech-stack/roblox-studio.svg" alt="" width="22" height="22">
+              </a>
             </div>
           </div>
-        </div>
-      </a>
+        </article>
+
+        <article class="featured-project" data-card-href="https://github.com/minonosky/manhunt-plugin" tabindex="0" role="link" aria-label="View the Minecraft Manhunt Plugin on GitHub">
+          <figure class="featured-thumb featured-thumb--contain">
+            <img src="images/projects/minecraft/minecraft1.png" alt="Minecraft screen showing the Manhunt plugin commands" width="645" height="332">
+          </figure>
+          <div class="featured-name">
+            <h3 class="hand">Minecraft Manhunt Plugin</h3>
+            <p>a server plugin for Minecraft made for the manhunt game mode.</p>
+          </div>
+          <div class="featured-card-footer">
+            <p class="featured-tools">JAVA / INTELLIJ IDEA</p>
+            <div class="featured-card-icons" aria-label="Java, IntelliJ IDEA, and GitHub">
+              <img src="images/tech-stack/java.svg" alt="Java" width="22" height="22">
+              <img src="images/tech-stack/intellij.svg" alt="IntelliJ IDEA" width="22" height="22">
+              <a class="featured-project-link" href="https://github.com/minonosky/manhunt-plugin" target="_blank" rel="noopener noreferrer" aria-label="View Sebastian's GitHub profile">
+                <img class="featured-link-icon--white" src="images/tech-stack/github.svg" alt="" width="22" height="22">
+              </a>
+            </div>
+          </div>
+        </article>
+
+      </div>
     </section>
   </main>
 
