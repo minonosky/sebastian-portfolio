@@ -6,9 +6,10 @@ live site: [minonosky.com](https://minonosky.com)
 
 ## Features
 
+- typewriter style homepage intro
 - raw black and white visuals with responsive layouts
 - animated portrait interaction with a short bio and tech stack
-- seamless image reels for projects and music
+- featured projects cards
 
 ## Built with
 
