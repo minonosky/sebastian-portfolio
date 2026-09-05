@@ -41,36 +41,90 @@ document.querySelectorAll("[data-case-carousel]").forEach((carousel) => {
   const previousButton = carousel.querySelector("[data-carousel-prev]");
   const nextButton = carousel.querySelector("[data-carousel-next]");
   const count = carousel.querySelector("[data-carousel-count]");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   let activeSlide = 0;
+  let transitionInProgress = false;
 
   if (!slides.length) return;
 
-  const showSlide = (nextSlide) => {
-    activeSlide = (nextSlide + slides.length) % slides.length;
+  const updateCount = () => {
+    if (!count) return;
 
-    slides.forEach((slide, index) => {
-      if (index !== activeSlide) {
-        slide.querySelectorAll("video").forEach((video) => video.pause());
-      }
-      slide.hidden = index !== activeSlide;
-    });
-
-    if (count) {
-      const current = String(activeSlide + 1).padStart(2, "0");
-      const total = String(slides.length).padStart(2, "0");
-      count.textContent = `${current} / ${total}`;
-    }
+    const current = String(activeSlide + 1).padStart(2, "0");
+    const total = String(slides.length).padStart(2, "0");
+    count.textContent = `${current} / ${total}`;
   };
 
-  previousButton?.addEventListener("click", () => showSlide(activeSlide - 1));
-  nextButton?.addEventListener("click", () => showSlide(activeSlide + 1));
+  const setControlsDisabled = (disabled) => {
+    if (previousButton) previousButton.disabled = disabled;
+    if (nextButton) nextButton.disabled = disabled;
+  };
+
+  const showSlide = (nextSlide, direction) => {
+    if (transitionInProgress) return;
+
+    const nextIndex = (nextSlide + slides.length) % slides.length;
+    if (nextIndex === activeSlide) return;
+
+    const outgoingSlide = slides[activeSlide];
+    const incomingSlide = slides[nextIndex];
+
+    outgoingSlide.querySelectorAll("video").forEach((video) => video.pause());
+    incomingSlide.hidden = false;
+    incomingSlide.setAttribute("aria-hidden", "false");
+
+    if (reduceMotion.matches) {
+      outgoingSlide.hidden = true;
+      outgoingSlide.setAttribute("aria-hidden", "true");
+      activeSlide = nextIndex;
+      updateCount();
+      return;
+    }
+
+    transitionInProgress = true;
+    setControlsDisabled(true);
+
+    const distance = direction * 12;
+    const timing = {
+      duration: 520,
+      easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+      fill: "forwards"
+    };
+
+    const outgoingAnimation = outgoingSlide.animate([
+      { opacity: 1, transform: "translateX(0)" },
+      { opacity: 0, transform: `translateX(${-distance}%)` }
+    ], timing);
+    const incomingAnimation = incomingSlide.animate([
+      { opacity: 0, transform: `translateX(${distance}%)` },
+      { opacity: 1, transform: "translateX(0)" }
+    ], timing);
+
+    Promise.all([outgoingAnimation.finished, incomingAnimation.finished]).then(() => {
+      outgoingSlide.hidden = true;
+      outgoingSlide.setAttribute("aria-hidden", "true");
+      outgoingAnimation.cancel();
+      incomingAnimation.cancel();
+      activeSlide = nextIndex;
+      transitionInProgress = false;
+      setControlsDisabled(false);
+      updateCount();
+    });
+  };
+
+  slides.forEach((slide, index) => {
+    slide.hidden = index !== activeSlide;
+    slide.setAttribute("aria-hidden", String(index !== activeSlide));
+  });
+  updateCount();
+
+  previousButton?.addEventListener("click", () => showSlide(activeSlide - 1, -1));
+  nextButton?.addEventListener("click", () => showSlide(activeSlide + 1, 1));
 
   carousel.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowLeft") showSlide(activeSlide - 1);
-    if (event.key === "ArrowRight") showSlide(activeSlide + 1);
+    if (event.key === "ArrowLeft") showSlide(activeSlide - 1, -1);
+    if (event.key === "ArrowRight") showSlide(activeSlide + 1, 1);
   });
-
-  showSlide(0);
 });
 
 const robloxStats = document.querySelector("[data-roblox-stats]");
